@@ -80,7 +80,7 @@ namespace EMS_API.Controllers
             }
 
             var device = _mapper.Map<Device>(updateDevice);
-            device.DeviceId = id;
+            device.Id = id;
 
             try
             {
@@ -113,7 +113,7 @@ namespace EMS_API.Controllers
             var device = _mapper.Map<Device>(newDevice);
 
             await Task.Run(() => _deviceService.Insert(device));
-            return CreatedAtAction("GetDevice", new { id = device.DeviceId }, newDevice);
+            return CreatedAtAction("GetDevice", new { id = device.Id }, newDevice);
         }
 
         // DELETE: api/Device/5

@@ -24,24 +24,22 @@ namespace EMS_API.Migrations
 
             modelBuilder.Entity("EMS_API.Models.Account", b =>
                 {
-                    b.Property<Guid>("AccountId")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("RoleId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Username")
                         .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("AccountId");
+                    b.HasKey("Id");
 
                     b.HasIndex("RoleId");
 
@@ -50,7 +48,7 @@ namespace EMS_API.Migrations
 
             modelBuilder.Entity("EMS_API.Models.Device", b =>
                 {
-                    b.Property<Guid>("DeviceId")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
@@ -73,37 +71,14 @@ namespace EMS_API.Migrations
                     b.Property<bool>("Status")
                         .HasColumnType("bit");
 
-                    b.HasKey("DeviceId");
+                    b.HasKey("Id");
 
                     b.ToTable("Devices");
                 });
 
-            modelBuilder.Entity("EMS_API.Models.Log", b =>
-                {
-                    b.Property<Guid>("LogId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("DeviceId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Message")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("LogId");
-
-                    b.HasIndex("DeviceId");
-
-                    b.ToTable("Logs");
-                });
-
             modelBuilder.Entity("EMS_API.Models.Profile", b =>
                 {
-                    b.Property<Guid>("ProfileId")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
@@ -133,7 +108,7 @@ namespace EMS_API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("ProfileId");
+                    b.HasKey("Id");
 
                     b.HasIndex("AccountId")
                         .IsUnique();
@@ -146,19 +121,58 @@ namespace EMS_API.Migrations
                     b.Property<Guid>("ProfileID")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("DeviceID")
+                    b.Property<Guid>("DeviceId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("ProfileID", "DeviceID");
+                    b.HasKey("ProfileID", "DeviceId");
 
-                    b.HasIndex("DeviceID");
+                    b.HasIndex("DeviceId");
 
                     b.ToTable("ProfileDevices");
                 });
 
+            modelBuilder.Entity("EMS_API.Models.RefreshToken", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AccountId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("IsRevoked")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IsUsed")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("JwtId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccountId")
+                        .IsUnique();
+
+                    b.ToTable("Tokens");
+                });
+
             modelBuilder.Entity("EMS_API.Models.Role", b =>
                 {
-                    b.Property<Guid>("RoleId")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
@@ -166,7 +180,7 @@ namespace EMS_API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("RoleId");
+                    b.HasKey("Id");
 
                     b.ToTable("Roles");
                 });
@@ -180,17 +194,6 @@ namespace EMS_API.Migrations
                         .IsRequired();
 
                     b.Navigation("Role");
-                });
-
-            modelBuilder.Entity("EMS_API.Models.Log", b =>
-                {
-                    b.HasOne("EMS_API.Models.Device", "Device")
-                        .WithMany("Logs")
-                        .HasForeignKey("DeviceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Device");
                 });
 
             modelBuilder.Entity("EMS_API.Models.Profile", b =>
@@ -208,7 +211,7 @@ namespace EMS_API.Migrations
                 {
                     b.HasOne("EMS_API.Models.Device", "Device")
                         .WithMany("ProfileDevices")
-                        .HasForeignKey("DeviceID")
+                        .HasForeignKey("DeviceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -223,16 +226,28 @@ namespace EMS_API.Migrations
                     b.Navigation("Profile");
                 });
 
+            modelBuilder.Entity("EMS_API.Models.RefreshToken", b =>
+                {
+                    b.HasOne("EMS_API.Models.Account", "Account")
+                        .WithOne("Token")
+                        .HasForeignKey("EMS_API.Models.RefreshToken", "AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Account");
+                });
+
             modelBuilder.Entity("EMS_API.Models.Account", b =>
                 {
                     b.Navigation("Profile")
+                        .IsRequired();
+
+                    b.Navigation("Token")
                         .IsRequired();
                 });
 
             modelBuilder.Entity("EMS_API.Models.Device", b =>
                 {
-                    b.Navigation("Logs");
-
                     b.Navigation("ProfileDevices");
                 });
 

@@ -2,9 +2,10 @@
 {
     public class AuthenticationResponse
     {
-        public string Username { get; set; } = string.Empty;
-        public string Token { get; set; } = string.Empty;
+        public string? Token { get; set; }
+        public bool IsAuthenticated { get; set; }
         public int ExpiresIn { get; set; }
+        public List<string>? Errors { get; set; }
 
     }
 }

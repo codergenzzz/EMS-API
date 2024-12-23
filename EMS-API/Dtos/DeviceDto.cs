@@ -2,7 +2,7 @@
 {
     public class DeviceDto
     {
-        public Guid DeviceId { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public bool Status { get; set; } // 1-on, 0-off
         public string MAC { get; set; } = string.Empty;

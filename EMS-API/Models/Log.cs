@@ -12,7 +12,7 @@ namespace EMS_API.Models
         public DateTime CreatedAt { get; set; }
 
         [ForeignKey("Device")]
-        public Guid DeviceId { get; set; }
+        public Guid Id { get; set; }
         public Device Device { get; set; } = null!;
 
     }

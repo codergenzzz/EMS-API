@@ -95,7 +95,7 @@ namespace EMS_API.Controllers
             var profile = _mapper.Map<Models.Profile>(newProfile);
 
             await Task.Run(() => _profileService.Insert(profile));
-            return CreatedAtAction("GetProfile", new { id = profile.ProfileId }, newProfile);
+            return CreatedAtAction("GetProfile", new { id = profile.Id }, newProfile);
         }
 
         [HttpPut("{id}")]
@@ -106,7 +106,7 @@ namespace EMS_API.Controllers
                 return BadRequest(ModelState);
             }
             var profile = _mapper.Map<Models.Profile>(updateProfile);
-            profile.ProfileId = id;
+            profile.Id = id;
             try
             {
                 await Task.Run(() => _profileService.Update(profile));

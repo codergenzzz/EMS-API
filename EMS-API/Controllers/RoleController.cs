@@ -2,6 +2,7 @@
 using EMS_API.Dtos;
 using EMS_API.Models;
 using EMS_API.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EMS_API.Controllers
@@ -13,7 +14,6 @@ namespace EMS_API.Controllers
         private readonly IRoleService _roleService;
         private readonly IMapper _mapper;
 
-
         public RoleController(IRoleService roleService, IMapper mapper)
         {
             _roleService = roleService;
@@ -22,6 +22,7 @@ namespace EMS_API.Controllers
 
         // GET: api/role
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<IEnumerable<Role>>> GetRoles()
         {
             var roles = await Task.Run(() => _mapper.Map<IEnumerable<RoleDto>>(_roleService.GetRoles()));
@@ -36,6 +37,7 @@ namespace EMS_API.Controllers
 
         // GET: api/role/id
         [HttpGet("{id}")]
+        [Authorize(Roles = "Customer")]
         public async Task<ActionResult<Role>> GetRoleById(Guid id)
         {
             var role = await Task.Run(() => _mapper.Map<RoleDto>(_roleService.GetRoleById(id)));

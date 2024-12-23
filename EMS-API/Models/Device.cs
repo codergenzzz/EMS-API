@@ -4,7 +4,7 @@ namespace EMS_API.Models
 {
     public class Device
     {
-        public Guid DeviceId { get; set; }
+        public Guid Id { get; set; }
         [Required]
         public string Name { get; set; } = string.Empty;
         [Required]
@@ -15,7 +15,7 @@ namespace EMS_API.Models
         public string Location { get; set; } = string.Empty;    // kitchen, living room, bedroom, etc.
 
         public ICollection<ProfileDevice> ProfileDevices { get; set; } = new List<ProfileDevice>();
-        public ICollection<Log> Logs { get; set; } = new List<Log>();
+        // public ICollection<Log> Logs { get; set; } = new List<Log>();
 
     }
 }

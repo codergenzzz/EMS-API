@@ -5,14 +5,12 @@ namespace EMS_API.Models
 {
     public class Account
     {
-        public Guid AccountId { get; set; }
+        public Guid Id { get; set; }
 
         [Required]
-        [MaxLength(255)]
         public string Username { get; set; } = string.Empty;
 
         [Required]
-        [MaxLength(255)]
         public string Password { get; set; } = string.Empty;
 
         [ForeignKey("Role")]
@@ -20,5 +18,7 @@ namespace EMS_API.Models
         public Role Role { get; set; }
 
         public Profile Profile { get; set; } = null!;
+        public RefreshToken Token { get; set; } = null!;
+
     }
 }

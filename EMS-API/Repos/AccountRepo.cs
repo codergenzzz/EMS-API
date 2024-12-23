@@ -29,6 +29,10 @@ namespace EMS_API.Repos
         {
             return _context.Accounts.Find(id);
         }
+        public Account? GetAccountByUsername(string username)
+        {
+            return _context.Accounts.FirstOrDefault(a => a.Username == username);
+        }
         public List<Account> GetAccountByRole(string roleName)
         {
             var role = _context.Roles.FirstOrDefault(r => r.Name == roleName);
@@ -36,7 +40,7 @@ namespace EMS_API.Repos
             {
                 return new List<Account>();
             }
-            Guid roleId = role.RoleId;
+            Guid roleId = role.Id;
             return _context.Accounts.Where(a => a.RoleId == roleId).ToList();
         }
         public List<Account> GetAccounts()

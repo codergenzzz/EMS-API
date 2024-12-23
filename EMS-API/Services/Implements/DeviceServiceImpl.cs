@@ -77,7 +77,7 @@ namespace EMS_API.Services.Implements
                 throw new ArgumentNullException(nameof(device));
             }
 
-            var existingDevice = _deviceRepo.GetDeviceById(device.DeviceId);
+            var existingDevice = _deviceRepo.GetDeviceById(device.Id);
 
             if (existingDevice == null)
             {
