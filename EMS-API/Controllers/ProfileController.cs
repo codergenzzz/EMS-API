@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using EMS_API.Dtos;
+using EMS_API.Dtos.Request;
 using EMS_API.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -85,7 +86,7 @@ namespace EMS_API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ProfileDto>> CreateDevice([FromBody] ProfileDto newProfile)
+        public async Task<ActionResult<ProfileDto>> CreateProfile([FromBody] ProfileDto newProfile)
         {
             if (newProfile == null)
             {
@@ -95,7 +96,7 @@ namespace EMS_API.Controllers
             var profile = _mapper.Map<Models.Profile>(newProfile);
 
             await Task.Run(() => _profileService.Insert(profile));
-            return CreatedAtAction("GetProfile", new { id = profile.Id }, newProfile);
+            return CreatedAtAction("GetProfiles", new { id = profile.Id }, newProfile);
         }
 
         [HttpPut("{id}")]
@@ -135,6 +136,17 @@ namespace EMS_API.Controllers
             }
             await Task.Run(() => _profileService.Delete(id));
             return NoContent();
+        }
+
+        [HttpPut("change-password")]
+        public async Task<ActionResult<string>> ChangePassword([FromBody] ChangePasswordRequest changePassword)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await Task.Run(() => _profileService.ChangePassword(changePassword.Token, changePassword.OldPassword, changePassword.NewPassword));
+            return Ok(result);
         }
 
         private bool ProfileExists(Guid id)

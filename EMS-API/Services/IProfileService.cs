@@ -11,5 +11,6 @@ namespace EMS_API.Services
         public Profile Insert(Profile profile);
         public Profile Update(Profile profile);
         public void Delete(Guid profileId);
+        public string ChangePassword(string Token, string oldPassword, string newPassword);
     }
 }

@@ -46,5 +46,11 @@ namespace EMS_API.Controllers
             }
             return Ok(result);
         }
+
+        [HttpGet("logout")]
+        public async Task<ActionResult> Logout()
+        {
+            return Ok();
+        }
     }
 }

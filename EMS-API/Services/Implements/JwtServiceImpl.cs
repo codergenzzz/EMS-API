@@ -29,7 +29,7 @@ namespace EMS_API.Services.Implements
                     new Claim(ClaimTypes.Role, role),
                     new Claim(ClaimTypes.Name, account.Username)
                 }),
-                Expires = DateTime.UtcNow.AddMinutes(30),
+                Expires = DateTime.UtcNow.AddMinutes(5),
                 Issuer = _configuration["Jwt:Issuer"],
                 Audience = _configuration["Jwt:Audience"],
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

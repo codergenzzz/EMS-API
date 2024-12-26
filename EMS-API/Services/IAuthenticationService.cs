@@ -7,5 +7,6 @@ namespace EMS_API.Services
     {
         public AuthenticationResponse Login(LoginRequest request);
         public bool Register(RegisterRequest request);
+
     }
 }

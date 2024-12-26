@@ -20,7 +20,7 @@ namespace EMS_API.Controllers
             _mapper = mapper;
         }
 
-        // GET: api/role
+
         [HttpGet]
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<IEnumerable<Role>>> GetRoles()
@@ -35,7 +35,7 @@ namespace EMS_API.Controllers
             return Ok(roles);
         }
 
-        // GET: api/role/id
+
         [HttpGet("{id}")]
         [Authorize(Roles = "Customer")]
         public async Task<ActionResult<Role>> GetRoleById(Guid id)

@@ -61,6 +61,8 @@ namespace EMS_API.Services.Implements
                 throw new ArgumentNullException(nameof(device));
             }
 
+
+
             var result = _deviceRepo.Insert(device);
             if (!result)
             {

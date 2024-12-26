@@ -10,13 +10,14 @@ namespace EMS_API.Services.Implements
         private readonly AccountRepo _accountRepo;
         private readonly RoleRepo _roleRepo;
         private readonly IJwtService _jwtService;
-        public AuthenticationServiceImpl(AccountRepo accountRepo, RoleRepo roleRepo, IJwtService jwtService)
+        private readonly ProfileRepo _profileRepo;
+        public AuthenticationServiceImpl(AccountRepo accountRepo, RoleRepo roleRepo, IJwtService jwtService, ProfileRepo profileRepo)
         {
             _accountRepo = accountRepo;
             _roleRepo = roleRepo;
             _jwtService = jwtService;
+            _profileRepo = profileRepo;
         }
-
 
         public AuthenticationResponse Login(LoginRequest request)
         {
@@ -72,7 +73,13 @@ namespace EMS_API.Services.Implements
                 RoleId = role.Id
             };
 
-            var result = _accountRepo.Insert(newAccount);
+            var newProfile = new Profile
+            {
+                Id = Guid.NewGuid(),
+                AccountId = newAccount.Id
+            };
+
+            var result = _accountRepo.Insert(newAccount) && _profileRepo.Insert(newProfile);
 
             if (!result)
             {
@@ -81,5 +88,7 @@ namespace EMS_API.Services.Implements
 
             return true;
         }
+
+
     }
 }

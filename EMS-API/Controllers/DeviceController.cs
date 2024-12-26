@@ -2,6 +2,7 @@
 using EMS_API.Dtos;
 using EMS_API.Models;
 using EMS_API.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,6 +10,7 @@ namespace EMS_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class DeviceController : ControllerBase
     {
         private readonly IDeviceService _deviceService;
@@ -20,8 +22,9 @@ namespace EMS_API.Controllers
             _mapper = mapper;
         }
 
-        // GET: api/Device
+
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<DeviceDto>>> GetDevices()
         {
             var devices = await Task.Run(() => _mapper.Map<IEnumerable<DeviceDto>>(_deviceService.GetDevices()));
@@ -33,7 +36,7 @@ namespace EMS_API.Controllers
             return Ok(devices);
         }
 
-        // GET: api/Device/5
+
         [HttpGet("{id}")]
         public async Task<ActionResult<DeviceDto>> GetDeviceById(Guid id)
         {
@@ -52,7 +55,7 @@ namespace EMS_API.Controllers
             return Ok(device);
         }
 
-        // GET: api/Device/mac/AA:BB:CC:DD:EE:FF
+
         [HttpGet("mac/{mac}")]
         public async Task<ActionResult<DeviceDto>> GetDeviceByMac(string mac)
         {
@@ -70,7 +73,7 @@ namespace EMS_API.Controllers
             return Ok(device);
         }
 
-        // PUT: api/Device/5
+
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateDevice(Guid id, [FromBody] DeviceDto updateDevice)
         {
@@ -101,7 +104,7 @@ namespace EMS_API.Controllers
             return NoContent();
         }
 
-        // POST: api/Device
+
         [HttpPost]
         public async Task<ActionResult<DeviceDto>> CreateDevice([FromBody] DeviceDto newDevice)
         {
@@ -113,7 +116,7 @@ namespace EMS_API.Controllers
             var device = _mapper.Map<Device>(newDevice);
 
             await Task.Run(() => _deviceService.Insert(device));
-            return CreatedAtAction("GetDevice", new { id = device.Id }, newDevice);
+            return CreatedAtAction("GetDevices", new { id = device.Id }, newDevice);
         }
 
         // DELETE: api/Device/5
